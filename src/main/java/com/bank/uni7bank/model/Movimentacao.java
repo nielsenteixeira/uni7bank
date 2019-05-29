@@ -18,26 +18,28 @@ public class Movimentacao extends BaseEntity{
     @Type(type = "tipo_movimentacao")
     private TipoMovimentacao tipoMovimentacao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "conta_origem_id")
     @JsonIgnore
     private Conta contaOrigem;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "conta_destino_id")
     @JsonIgnore
     private Conta contaDestino;
 
     private double valor;
+    private double saldo;
 
     public Movimentacao() {
     }
 
-    public Movimentacao(TipoMovimentacao tipoMovimentacao, Conta contaOrigem, Conta contaDestino, double valor) {
+    public Movimentacao(TipoMovimentacao tipoMovimentacao, Conta contaOrigem, Conta contaDestino, double valor, double saldo) {
         this.tipoMovimentacao = tipoMovimentacao;
         this.contaOrigem = contaOrigem;
         this.contaDestino = contaDestino;
         this.valor = valor;
+        this.saldo = saldo;
     }
 
     public TipoMovimentacao getTipoMovimentacao() {
@@ -70,5 +72,13 @@ public class Movimentacao extends BaseEntity{
 
     public void setValor(double valor) {
         this.valor = valor;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 }

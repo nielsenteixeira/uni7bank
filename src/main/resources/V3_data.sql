@@ -1,0 +1,10 @@
+--insert into cliente (criado_em, modificado_em, nome, cpf_cnpj, tipo_pessoa) values
+--(now(), now(), 'Cliente 3', '99999999999', 'FISICA'),
+--(now(), now(), 'Cliente 4', '1111111111111', 'JURIDICA');
+--
+--insert into agencia (criado_em, modificado_em, nome, numero, endereco)
+--values (now(), now(), 'Agencia 2', 2, 'Edson Queiroz');
+--
+--insert into conta(criado_em, modificado_em, numero, tipo_conta, saldo, agencia_id, cliente_id) values
+--(now(), now(), 1, 'POUPANCA', 5000, select id from agencia where nome = 'Agencia 2', select id from cliente where cpf_cnpj = '99999999999'),
+--(now(), now(), 1, 'CORRENTE', 6000, select id from agencia where nome = 'Agencia 2', select id from cliente where cpf_cnpj = '1111111111111');

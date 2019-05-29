@@ -53,6 +53,7 @@ CREATE TABLE movimentacao
    modificado_em timestamp with time zone NOT NULL,
    tipo_movimentacao tipo_movimentacao NOT NULL,
    valor float NOT NULL,
+   saldo float NOT NULL,
    conta_origem_id integer references conta (id),
    conta_destino_id integer references conta (id)
 );
