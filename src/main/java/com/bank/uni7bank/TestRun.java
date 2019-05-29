@@ -4,6 +4,7 @@ import com.bank.uni7bank.Repository.AgenciaRepository;
 import com.bank.uni7bank.Repository.ClienteRepository;
 import com.bank.uni7bank.Repository.ContaRepository;
 import com.bank.uni7bank.Repository.MovimentacaoRepository;
+import com.bank.uni7bank.model.Cliente;
 import com.bank.uni7bank.model.Movimentacao;
 import com.bank.uni7bank.model.TipoMovimentacao;
 import com.bank.uni7bank.reports.ExtratoReport;
@@ -11,10 +12,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Configuration
 public class TestRun {
@@ -51,25 +48,31 @@ public class TestRun {
             var valorDeposito2 = 135D;
             efetuaDeposito(valorDeposito2);
 
-            var valorTransferencia2 = 10;
+            var valorTransferencia2 = 200;
             efetuaTransferenciaParaUni7(valorTransferencia2);
 
             var clienteNielsen = clienteRepository.findByCpfCnpj("02812648309");
 
-            //extrato
-            if(clienteNielsen.isPresent()) {
-                var contaNielsen = contaRepository.findByClienteId(clienteNielsen.get().getId());
+            imprimeExtrato(clienteNielsen.get());
 
-                if (contaNielsen.isPresent()) {
-                    var movimentacoes = movimentacaoRepository.findByContaOrigemId(contaNielsen.get().getId());
-                    //var movimentacoes = movimentacaoRepository.findByContaOrigemAgenciaId(contaNielsen.get().getAgencia().getId());
-//                    var ontem = Date.from(LocalDateTime.now().minusDays(15).atZone(ZoneId.systemDefault()).toInstant());
-//                    var movimentacoes = movimentacaoRepository.findByModificadoEmBetween(ontem, new Date() );
-                    var extrato = new ExtratoReport(movimentacoes);
-                    System.out.println(extrato.toString());
-                }
-            }
+            System.out.println("Saldo: R$" + clienteNielsen.get().getContas().get(0).getSaldo());
+
         };
+    }
+
+    private void imprimeExtrato(Cliente clienteNielsen) {
+        var contaNielsen = contaRepository.findByClienteId(clienteNielsen.getId());
+
+        if (contaNielsen.isPresent()) {
+//            var movimentacoes = movimentacaoRepository.findByContaOrigemAgenciaId(contaNielsen.get().getAgencia().getId());
+//            var dataInicio = Date.from(LocalDateTime.now().minusDays(15).atZone(ZoneId.systemDefault()).toInstant());
+//            var movimentacoes = movimentacaoRepository.findByModificadoEmBetween(dataInicio, new Date() );
+
+            var movimentacoes = movimentacaoRepository.findByContaOrigemId(contaNielsen.get().getId());
+            var extrato = new ExtratoReport(movimentacoes);
+            System.out.println(extrato.toString());
+        }
+
     }
 
     @Transactional
