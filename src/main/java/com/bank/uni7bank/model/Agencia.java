@@ -11,6 +11,12 @@ public class Agencia extends BaseEntity {
     public Agencia() {
     }
 
+    public Agencia(int numero, String nome, String endereco) {
+        this.numero = numero;
+        this.nome = nome;
+        this.endereco = endereco;
+    }
+
     public int getNumero() {
         return numero;
     }

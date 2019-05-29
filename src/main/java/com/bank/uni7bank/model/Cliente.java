@@ -27,6 +27,12 @@ public class Cliente extends BaseEntity {
     public Cliente() {
     }
 
+    public Cliente(String nome, String cpfCnpj, TipoPessoa tipoPessoa) {
+        this.nome = nome;
+        this.cpfCnpj = cpfCnpj;
+        this.tipoPessoa = tipoPessoa;
+    }
+
     public String getNome() {
         return nome;
     }

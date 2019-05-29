@@ -30,6 +30,14 @@ public class Conta extends BaseEntity{
     public Conta() {
     }
 
+    public Conta(int numero, TipoConta tipoConta, double saldo, Agencia agencia, Cliente cliente) {
+        this.numero = numero;
+        this.tipoConta = tipoConta;
+        this.saldo = saldo;
+        this.agencia = agencia;
+        this.cliente = cliente;
+    }
+
     public int getNumero() {
         return numero;
     }

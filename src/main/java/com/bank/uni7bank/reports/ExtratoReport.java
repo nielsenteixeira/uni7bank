@@ -14,7 +14,7 @@ public class ExtratoReport {
         movimentacoes.forEach((m) -> {
             movimentacoesPojo.add(new MovimentacaoReport(m.getModifiedAt(), m.getContaOrigem().getCliente().getNome(),
                     m.getContaOrigem().getAgencia().getNome(), m.getContaOrigem().getNumero(),
-                    m.getContaDestino() != null ? m.getContaDestino().getNumero() : 0, m.getValor(), m.getSaldo()));
+                    m.getContaDestino() != null ? m.getContaDestino().getNumero() : 0, m.getValor(), m.getTipoMovimentacao().toString(), m.getSaldo()));
         });
     }
 
@@ -24,13 +24,13 @@ public class ExtratoReport {
 
     @Override
     public String toString() {
-        var str = "***************************************************** EXTRTATO ****************************************************************** \n";
+        var str = "***************************************************************** EXTRTATO *************************************************************************** \n";
 
        for(MovimentacaoReport mov: movimentacoesPojo) {
            str += mov.toString();
        }
 
-       str += " ******************************************************************************************************************************** ";
+       str += " ***************************************************************************************************************************************************** ";
        return str;
 
     }

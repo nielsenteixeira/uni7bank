@@ -4,9 +4,7 @@ import com.bank.uni7bank.Repository.AgenciaRepository;
 import com.bank.uni7bank.Repository.ClienteRepository;
 import com.bank.uni7bank.Repository.ContaRepository;
 import com.bank.uni7bank.Repository.MovimentacaoRepository;
-import com.bank.uni7bank.model.Cliente;
-import com.bank.uni7bank.model.Movimentacao;
-import com.bank.uni7bank.model.TipoMovimentacao;
+import com.bank.uni7bank.model.*;
 import com.bank.uni7bank.reports.ExtratoReport;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +31,7 @@ public class TestRun {
     @Transactional
     public CommandLineRunner efetuaMovimentacao() {
         return (args) -> {
+
             var valorTransferencia = 450;
             efetuaTransferenciaParaUni7(valorTransferencia);
 
@@ -51,6 +50,10 @@ public class TestRun {
             var valorTransferencia2 = 200;
             efetuaTransferenciaParaUni7(valorTransferencia2);
 
+            //criaNovaAgenciaContaECliente();
+//            var valorTransferencia3 = 10;
+//            efetuaTransferenciaParaNovaConta(valorTransferencia3);
+
             var clienteNielsen = clienteRepository.findByCpfCnpj("02812648309");
 
             imprimeExtrato(clienteNielsen.get());
@@ -60,6 +63,18 @@ public class TestRun {
         };
     }
 
+    private void criaNovaAgenciaContaECliente() {
+        var novaAgencia = new Agencia(2, "Nubank", "Rua abc");
+        agenciaRepository.save(novaAgencia);
+
+        var novoCliente = new Cliente("Mateus", "55555555555", TipoPessoa.FISICA);
+        clienteRepository.save(novoCliente);
+
+        var novaConta = new Conta(5, TipoConta.POUPANCA, 500, novaAgencia, novoCliente);
+        contaRepository.save(novaConta);
+    }
+
+    @Transactional
     private void imprimeExtrato(Cliente clienteNielsen) {
         var contaNielsen = contaRepository.findByClienteId(clienteNielsen.getId());
 
@@ -106,7 +121,7 @@ public class TestRun {
                 contaNielsen.get().setSaldo(contaNielsen.get().getSaldo() - valorSaque);
                 contaRepository.save(contaNielsen.get());
 
-                var deposito = new Movimentacao(TipoMovimentacao.DEPOSITO, contaNielsen.get(), null, valorSaque, contaNielsen.get().getSaldo());
+                var deposito = new Movimentacao(TipoMovimentacao.SAQUE, contaNielsen.get(), null, valorSaque, contaNielsen.get().getSaldo());
                 movimentacaoRepository.save(deposito);
             }
 
@@ -134,6 +149,35 @@ public class TestRun {
                     contaRepository.save(contaUni7.get());
 
                     var transferencia = new Movimentacao(TipoMovimentacao.TRANSFERENCIA, contaNielsen.get(), contaUni7.get(), valorTransferencia, contaNielsen.get().getSaldo());
+                    movimentacaoRepository.save(transferencia);
+                } else {
+                    throw new SaldoInsuficienteException("saldo insuficiente na conta id:" + contaNielsen.get().getId() + ". Saldo: " + contaNielsen.get().getSaldo());
+                }
+            }
+        }
+    }
+
+    @Transactional
+    private void efetuaTransferenciaParaNovaConta(double valorTransferencia) {
+        var clienteNielsen = clienteRepository.findByCpfCnpj("02812648309");
+        var novoCliente = clienteRepository.findByCpfCnpj("55555555555");
+
+        if(clienteNielsen.isPresent() && novoCliente.isPresent()) {
+
+            var contaNielsen = contaRepository.findByClienteId(clienteNielsen.get().getId());
+            var novaContaCriada = contaRepository.findByClienteId(novoCliente.get().getId());
+
+            if(contaNielsen.isPresent() && novaContaCriada.isPresent()) {
+
+                if(contaNielsen.get().getSaldo() >= valorTransferencia) {
+
+                    contaNielsen.get().setSaldo(contaNielsen.get().getSaldo() - valorTransferencia);
+                    novaContaCriada.get().setSaldo(novaContaCriada.get().getSaldo() + valorTransferencia);
+
+                    contaRepository.save(contaNielsen.get());
+                    contaRepository.save(novaContaCriada.get());
+
+                    var transferencia = new Movimentacao(TipoMovimentacao.TRANSFERENCIA, contaNielsen.get(), novaContaCriada.get(), valorTransferencia, contaNielsen.get().getSaldo());
                     movimentacaoRepository.save(transferencia);
                 } else {
                     throw new SaldoInsuficienteException("saldo insuficiente na conta id:" + contaNielsen.get().getId() + ". Saldo: " + contaNielsen.get().getSaldo());
