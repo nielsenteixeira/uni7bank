@@ -12,6 +12,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 @Configuration
 public class TestRun {
     private final AgenciaRepository agenciaRepository;
@@ -38,6 +42,18 @@ public class TestRun {
             var valorDeposito = 25D;
             efetuaDeposito(valorDeposito);
 
+            var valorSaque = 100D;
+            efetuaSaque(valorSaque);
+
+            var valorSaque2 = 50D;
+            efetuaSaque(valorSaque2);
+
+            var valorDeposito2 = 135D;
+            efetuaDeposito(valorDeposito2);
+
+            var valorTransferencia2 = 10;
+            efetuaTransferenciaParaUni7(valorTransferencia2);
+
             var clienteNielsen = clienteRepository.findByCpfCnpj("02812648309");
 
             //extrato
@@ -46,6 +62,9 @@ public class TestRun {
 
                 if (contaNielsen.isPresent()) {
                     var movimentacoes = movimentacaoRepository.findByContaOrigemId(contaNielsen.get().getId());
+                    //var movimentacoes = movimentacaoRepository.findByContaOrigemAgenciaId(contaNielsen.get().getAgencia().getId());
+//                    var ontem = Date.from(LocalDateTime.now().minusDays(15).atZone(ZoneId.systemDefault()).toInstant());
+//                    var movimentacoes = movimentacaoRepository.findByModificadoEmBetween(ontem, new Date() );
                     var extrato = new ExtratoReport(movimentacoes);
                     System.out.println(extrato.toString());
                 }
@@ -66,6 +85,25 @@ public class TestRun {
                 contaRepository.save(contaNielsen.get());
 
                 var deposito = new Movimentacao(TipoMovimentacao.DEPOSITO, contaNielsen.get(), null, valorDeposito, contaNielsen.get().getSaldo());
+                movimentacaoRepository.save(deposito);
+            }
+
+        }
+    }
+
+    @Transactional
+    private void efetuaSaque(double valorSaque) {
+        var clienteNielsen = clienteRepository.findByCpfCnpj("02812648309");
+
+        if(clienteNielsen.isPresent()) {
+            var contaNielsen = contaRepository.findByClienteId(clienteNielsen.get().getId());
+
+            if(contaNielsen.isPresent()) {
+
+                contaNielsen.get().setSaldo(contaNielsen.get().getSaldo() - valorSaque);
+                contaRepository.save(contaNielsen.get());
+
+                var deposito = new Movimentacao(TipoMovimentacao.DEPOSITO, contaNielsen.get(), null, valorSaque, contaNielsen.get().getSaldo());
                 movimentacaoRepository.save(deposito);
             }
 

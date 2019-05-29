@@ -53,14 +53,7 @@ public class MovimentacaoReport {
 
     @Override
     public String toString() {
-        return " MovimentacaoReport{" +
-                "data=" + data +
-                ", agencia='" + agencia + '\'' +
-                ", contaCliente='" + contaCliente + '\'' +
-                ", cliente='" + cliente + '\'' +
-                ", contaDestino='" + (contaDestino == 0 ? " - ": String.valueOf(contaDestino)) + '\'' +
-                ", valorMovimentacao=" + valorMovimentacao +
-                ", saldo=" + saldo +
-                "} \n";
+        String format = "|%1$-30s|%2$-10s|%3$-10s|%4$-30s|%5$-10s|%6$-10s|%7$-20s|\n";
+        return String.format(format, data.toLocalDateTime(), agencia, contaCliente, cliente, (contaDestino == 0 ? " - ": String.valueOf(contaDestino)), valorMovimentacao, saldo);
     }
 }
