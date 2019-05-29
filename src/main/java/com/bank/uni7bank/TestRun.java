@@ -50,7 +50,7 @@ public class TestRun {
             var valorTransferencia2 = 200;
             efetuaTransferenciaParaUni7(valorTransferencia2);
 
-            //criaNovaAgenciaContaECliente();
+//            criaNovaAgenciaContaECliente();
 //            var valorTransferencia3 = 10;
 //            efetuaTransferenciaParaNovaConta(valorTransferencia3);
 
@@ -63,6 +63,7 @@ public class TestRun {
         };
     }
 
+    @Transactional
     private void criaNovaAgenciaContaECliente() {
         var novaAgencia = new Agencia(2, "Nubank", "Rua abc");
         agenciaRepository.save(novaAgencia);
