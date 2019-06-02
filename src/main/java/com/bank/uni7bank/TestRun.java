@@ -32,23 +32,23 @@ public class TestRun {
     public CommandLineRunner efetuaMovimentacao() {
         return (args) -> {
 
-            var valorTransferencia = 450;
-            efetuaTransferenciaParaUni7(valorTransferencia);
+           var valorTransferencia = 450;
+           efetuaTransferenciaParaUni7(valorTransferencia);
 
-            var valorDeposito = 25D;
-            efetuaDeposito(valorDeposito);
+           var valorDeposito = 25D;
+           efetuaDeposito(valorDeposito);
 
-            var valorSaque = 100D;
-            efetuaSaque(valorSaque);
+           var valorSaque = 100D;
+           efetuaSaque(valorSaque);
 
-            var valorSaque2 = 50D;
-            efetuaSaque(valorSaque2);
+           var valorSaque2 = 50D;
+           efetuaSaque(valorSaque2);
 
-            var valorDeposito2 = 135D;
-            efetuaDeposito(valorDeposito2);
+           var valorDeposito2 = 135D;
+           efetuaDeposito(valorDeposito2);
 
-            var valorTransferencia2 = 200;
-            efetuaTransferenciaParaUni7(valorTransferencia2);
+           var valorTransferencia2 = 200;
+           efetuaTransferenciaParaUni7(valorTransferencia2);
 
 //            criaNovaAgenciaContaECliente();
 //            var valorTransferencia3 = 10;
