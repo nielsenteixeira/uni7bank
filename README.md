@@ -13,7 +13,7 @@ An experiment of Spring Data for the discipline of persistence of postgraduate c
 docker run --name uni7Bank -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=ecommerce postgres:9.6-alpine
 ```
 ```
-psql -h localhost -U postgres -d postgres
+psql -h localhost -U postgres -d postgres;
 ```
 ```
 create database uni7Bank;
